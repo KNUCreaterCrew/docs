@@ -25,4 +25,4 @@
 | Vision이 보내는 값과 웹이 받는 값은 어떻게 연결될까? | [REST·WebSocket 연동 명세](INTERFACES.md) |
 | 팀 문서를 고칠 때 어떤 규칙을 따를까? | [저장소 작업 규칙](AGENTS.md) |
 
-카메라 설정, 탐지기 실행 방법과 장비별 검증 기록은 Vision 저장소에서 관리합니다. [ZeroFrame Vision](https://github.com/KNUCreaterCrew/vision)
+카메라 설정과 장비별 검증 기록은 Vision 저장소에서, 좌석 상태를 받아 웹에 전달하는 FastAPI 서버는 Backend 저장소에서 관리합니다. [ZeroFrame Vision](https://github.com/KNUCreaterCrew/vision) · [ZeroFrame Backend](https://github.com/KNUCreaterCrew/backend)
