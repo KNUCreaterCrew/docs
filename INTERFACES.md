@@ -4,7 +4,19 @@
 
 ## 1. Vision이 좌석 상태를 보고합니다
 
-좌석 상태가 바뀌면 즉시 보고하고, 변화가 없어도 장치가 연결돼 있음을 알리는 보고(하트비트)를 10초마다 보냅니다. 다음은 10시 15분 29초에 처음으로 사용 중임을 확인한 좌석의 예입니다.
+### 장치가 지금 만드는 값
+
+2026-11-17에 확인한 Vision의 `main`과 `dev`에서는 카메라 관측을 처리한 뒤 좌석 ID별로 `SeatState`를 메모리에 보관합니다. 실행기는 터미널에 좌석 ID·상태, 분석 FPS, 추론 지연을 출력합니다. 백엔드로 보내는 HTTP 요청과 하트비트는 아직 구현 전입니다. [Vision 실행기](https://github.com/KNUCreaterCrew/vision/blob/6e266ff5d07b5c17cb3c210d20e1aef5c34882da/run_vision.py) · [개발 브랜치 상태 모델](https://github.com/KNUCreaterCrew/vision/blob/3ab2c04437e9830a3ca4aab1259c2246e96fc728/zeroframe/state.py)
+
+| 장치 안의 값 | 백엔드 연동 시 의미 |
+| --- | --- |
+| 좌석 ID와 `status` | 좌석별 보고의 `seat_id`, `status`가 됩니다. 상태 코드는 `OCCUPIED`, `AWAY`, `EMPTY`, `UNKNOWN`입니다. 실카메라 경로에서 `EMPTY` 확정에 필요한 검증기는 아직 연결되지 않았습니다. |
+| `status_since`, `last_observed_at` | 내부에서는 경과 시간을 재는 단조 시계의 초 단위 값입니다. 전송기가 관측에 대응하는 실제 시각을 별도로 기록해야 합니다. v1.1 장치 요청에는 `last_observed_at`을 선택적으로 싣고, 방 조회 응답에는 상태 변경 시각인 `status_since`도 표시합니다. |
+| `reason` | 관측 만료 등 장치가 알아낸 사유입니다. `EDGE_OFFLINE`은 보고가 끊긴 뒤 백엔드가 판단합니다. |
+
+### 연동할 요청 형식
+
+v1.1 설계에서는 좌석 상태가 바뀌면 즉시 보고하고, 변화가 없어도 장치가 연결돼 있음을 알리는 보고(하트비트)를 10초마다 보냅니다. 원본 영상, 좌석 이미지, 객체 탐지 상자와 카메라 좌표는 요청에 포함하지 않습니다. 아래는 10시 15분 29초에 사용 중임을 확인한 좌석을 가정한 **테스트용 요청**입니다.
 
 ```http
 POST /api/v1/rooms/IT4-101/seats/status
