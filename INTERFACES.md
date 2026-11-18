@@ -81,10 +81,10 @@ X-Edge-Api-Key: <장치 인증 키>
 | `timestamp` / `last_observed_at` | 장치의 보고 시각 / 좌석의 마지막 유효 관측 시각입니다. 시각은 시간대가 포함된 ISO 8601 형식으로 주고받습니다. 장치는 UTC(`+00:00`)로 보내고, 이 문서의 예시는 읽기 쉽도록 한국 시간으로 적습니다. |
 | `confidence` | 검증 가능한 신뢰값이 있으면 0~1, 없으면 `null`입니다. |
 | `decision_source` | 선택 필드입니다. 판정 경로를 `YOLO`, `YOLO_VLM`, `FALLBACK` 중 하나로 나타냅니다. |
-| `last_observed_at`, `reason` | 선택 필드입니다. 유효 관측이 없으면 관측 시각을 생략할 수 있습니다. 확인 불가 원인은 아래 코드로 표현합니다. |
+| `last_observed_at`, `reason` | 선택 필드입니다. 유효 관측이 없으면 관측 시각을 생략할 수 있습니다. 확인 불가 원인은 아래 코드로 표현합니다. `reason`은 `UNKNOWN` 좌석에만 보낼 수 있고, `UNKNOWN` 좌석에서 생략하면 사유는 `null`로 저장됩니다. |
 | `inference_fps` / `saved_frames_count` | YOLO의 실제 분석 FPS / 장치가 보고하는 저장 프레임 수입니다. |
 
-확인 불가 사유는 가림(`OCCLUDED`), 낮은 신뢰도(`LOW_CONFIDENCE`), 모델 간 불일치(`MODEL_CONFLICT`), 검증 시간 초과(`VLM_TIMEOUT`), 관측 만료(`STALE_OBSERVATION`), 장치 통신 두절(`EDGE_OFFLINE`)입니다.
+확인 불가 사유는 가림(`OCCLUDED`), 낮은 신뢰도(`LOW_CONFIDENCE`), 모델 간 불일치(`MODEL_CONFLICT`), 검증 시간 초과(`VLM_TIMEOUT`), 관측 만료(`STALE_OBSERVATION`), 장치 통신 두절(`EDGE_OFFLINE`)입니다. 사유마다 학생 화면에 보이는 말은 [좌석 상태 판정 기준](SEAT-STATES.md#확인-불가-사유)에 있습니다.
 
 **수신 성공 응답 · HTTP 200**
 
@@ -188,7 +188,7 @@ X-Edge-Api-Key: <장치 인증 키>
 }
 ```
 
-`available_seats`는 `EMPTY`, `unknown_seats`는 `UNKNOWN`인 좌석 수입니다. v1.1의 혼잡도 기준은 전체 좌석 중 빈자리 비율이 60% 이상이면 `LOW`, 25% 이상 60% 미만이면 `MODERATE`, 25% 미만이면 `HIGH`입니다. 화면에는 확인 불가 좌석 수도 함께 표시합니다. 좌석의 `reason`은 `UNKNOWN`인 좌석의 사유이고, 그 밖의 상태에서는 `null`입니다. `version`은 3번에서 설명합니다. 예시 방 이름은 배포 서버의 예시 방과 같은 값(`제1실습실 (예시)`)이라, 예시를 옮긴 모의 데이터가 실제 응답과 어긋나지 않습니다. 실제 방이 정해지면 이 값도 바뀝니다.
+`available_seats`는 `EMPTY`, `unknown_seats`는 `UNKNOWN`인 좌석 수입니다. v1.1의 혼잡도 기준은 전체 좌석 중 빈자리 비율이 60% 이상이면 `LOW`, 25% 이상 60% 미만이면 `MODERATE`, 25% 미만이면 `HIGH`입니다. 화면에는 확인 불가 좌석 수도 함께 표시합니다. 좌석의 `reason`은 `UNKNOWN`인 좌석의 사유이고, 그 밖의 상태에서는 `null`입니다. 장치가 사유를 빼고 보낸 `UNKNOWN` 좌석도 `null`입니다. `version`은 3번에서 설명합니다. 예시 방 이름은 배포 서버의 예시 방과 같은 값(`제1실습실 (예시)`)이라, 예시를 옮긴 모의 데이터가 실제 응답과 어긋나지 않습니다. 실제 방이 정해지면 이 값도 바뀝니다.
 
 ### 좌석 배치(`layout`)를 읽는 방법
 
