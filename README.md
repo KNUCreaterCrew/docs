@@ -23,6 +23,7 @@
 | 사람이 잠깐 화면에서 사라지면 빈자리로 표시할까? | [좌석 상태 판정 기준](SEAT-STATES.md) |
 | 카메라부터 학생 화면까지 어떤 데이터가 이동할까? | [시스템 구조](ARCHITECTURE.md) |
 | Vision이 보내는 값과 웹이 받는 값은 어떻게 연결될까? | [REST·WebSocket 연동 명세](INTERFACES.md) |
+| 이 실습실은 보통 언제 한산할까? 장치가 꺼진 시간은 어떻게 보일까? | [혼잡도 통계 명세](INTERFACES.md#4-웹이-혼잡도-통계를-읽습니다) |
 | 팀 문서를 고칠 때 어떤 규칙을 따를까? | [저장소 작업 규칙](AGENTS.md) |
 
 카메라 설정과 장비별 검증 기록은 Vision 저장소에서, 좌석 상태를 받아 웹에 전달하는 FastAPI 서버는 Backend 저장소에서 관리합니다. [ZeroFrame Vision](https://github.com/KNUCreaterCrew/vision) · [ZeroFrame Backend](https://github.com/KNUCreaterCrew/backend)
